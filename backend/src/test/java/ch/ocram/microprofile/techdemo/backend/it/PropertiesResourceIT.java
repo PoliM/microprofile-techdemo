@@ -1,4 +1,4 @@
-package ch.ocram.microprofile.techdemo.it;
+package ch.ocram.microprofile.techdemo.backend.it;
 
 import org.apache.cxf.jaxrs.provider.jsrjsonp.JsrJsonpProvider;
 import org.junit.Test;
@@ -19,7 +19,7 @@ public class PropertiesResourceIT {
         if (port == null) {
             port = "9501";
         }
-        String url = "http://localhost:" + port + "/frontend/rest";
+        String url = "http://localhost:" + port + "/backend/rest";
 
         Client client = ClientBuilder.newClient();
         client.register(JsrJsonpProvider.class);

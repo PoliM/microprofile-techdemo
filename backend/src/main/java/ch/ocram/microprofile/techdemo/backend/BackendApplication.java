@@ -1,8 +1,8 @@
-package ch.ocram.microprofile.techdemo;
+package ch.ocram.microprofile.techdemo.backend;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
 @ApplicationPath("rest")
-public class FrontendApplication extends Application {
+public class BackendApplication extends Application {
 }

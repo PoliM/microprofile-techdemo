@@ -1,4 +1,4 @@
-package ch.ocram.microprofile.techdemo;
+package ch.ocram.microprofile.techdemo.frontend;
 
 import javax.json.Json;
 import javax.json.JsonObject;

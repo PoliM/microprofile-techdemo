@@ -1,0 +1,9 @@
+<server description="Backend server">
+    <featureManager>
+        <feature>jaxrs-2.1</feature>
+    </featureManager>
+    
+    <httpEndpoint httpPort="${default.http.port}" id="defaultHttpEndpoint" />
+    
+    <webApplication id="backend" location="backend.war" name="backend"/>
+</server>
