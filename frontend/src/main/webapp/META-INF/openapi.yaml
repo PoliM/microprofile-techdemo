@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  title: Frontent
+  description: Frontend services.
+  version: 1.0.0
+
+servers:
+- url: http://localhost:{port}/frontend/rest
+  description: Local development.
+  variables:
+    port:
+      default: "9501"
+      description: Server HTTP port.
+paths:
+  /systemproperties:
+    get:
+      operationId: getSystemProperties
+      responses:
+        200:
+          description: The current system properties.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
