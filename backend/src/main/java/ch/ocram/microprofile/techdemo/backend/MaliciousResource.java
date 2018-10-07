@@ -1,18 +1,22 @@
 package ch.ocram.microprofile.techdemo.backend;
 
+import org.eclipse.microprofile.health.Health;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.inject.Inject;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/malicious")
 public class MaliciousResource {
+
+    @Inject
+    @Health
+    private HealthProbe healthProbe;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -54,5 +58,24 @@ public class MaliciousResource {
         }
 
         return Response.ok().build();
+    }
+
+    @POST
+    @APIResponse(
+            responseCode = "202",
+            description = "The operation went through successfully")
+    @APIResponse(
+            responseCode = "422",
+            description = "The countdown needs to be > 0")
+    @Operation(
+            summary = "Sets the number of healtchecks that will fail.")
+    public Response setHealthProbeCountdown(@RequestBody(description = "The number of times the health check will fail") int countdown) {
+
+        if (countdown > 0) {
+            this.healthProbe.setCountdown(countdown);
+            return Response.accepted().build();
+        }
+
+        return Response.status(422).build(); // Unprocessable entity
     }
 }

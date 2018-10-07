@@ -2,6 +2,7 @@ package ch.ocram.microprofile.techdemo.backend.it;
 
 import org.junit.Test;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,4 +44,20 @@ public class MaliciousResourceIT extends IntegrationTestBase {
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         assertThat(diff).isCloseTo(500L, within(50L));
     }
+
+    @Test
+    public void testHealth() {
+        assertThat(healthCheck()).isTrue();
+
+        Response response = target.path("/malicious").request().post(Entity.text("3"));
+        response.close();
+        assertThat(response.getStatus()).isEqualTo(Response.Status.ACCEPTED.getStatusCode());
+
+        assertThat(healthCheck()).isFalse();
+        assertThat(healthCheck()).isFalse();
+        assertThat(healthCheck()).isFalse();
+
+        assertThat(healthCheck()).isTrue();
+    }
+
 }
