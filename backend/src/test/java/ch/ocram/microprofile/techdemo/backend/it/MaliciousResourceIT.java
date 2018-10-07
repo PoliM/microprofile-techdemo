@@ -42,7 +42,7 @@ public class MaliciousResourceIT extends IntegrationTestBase {
         response.close();
 
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        assertThat(diff).isCloseTo(500L, within(50L));
+        assertThat(diff).isCloseTo(500L, within(100L));
     }
 
     @Test

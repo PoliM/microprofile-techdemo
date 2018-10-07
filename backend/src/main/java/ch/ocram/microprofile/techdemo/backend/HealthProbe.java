@@ -3,6 +3,7 @@ package ch.ocram.microprofile.techdemo.backend;
 import org.eclipse.microprofile.health.Health;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.metrics.annotation.Counted;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -12,6 +13,7 @@ public class HealthProbe implements HealthCheck {
 
     private int countdown;
 
+    @Counted(name = "setCoundown", monotonic = true)
     public void setCountdown(int countdown) {
         this.countdown = countdown;
     }
