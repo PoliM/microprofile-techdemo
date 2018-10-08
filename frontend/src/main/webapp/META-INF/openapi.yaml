@@ -24,3 +24,9 @@ paths:
                 type: object
                 additionalProperties:
                   type: string
+  /tolerant/retry:
+    get:
+      operationId: tolerantRetry
+      responses:
+        200:
+          description: Ok.

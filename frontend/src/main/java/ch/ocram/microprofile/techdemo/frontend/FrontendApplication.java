@@ -12,6 +12,7 @@ public class FrontendApplication extends Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<>();
         classes.add(PropertiesResource.class);
+        classes.add(TolerantResource.class);
         return classes;
     }
 }
