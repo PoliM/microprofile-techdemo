@@ -38,6 +38,10 @@ TBD
 * gRPC
 * Comparison to https://12factor.net/ and "Beyond The 12 Factor App"
 
+## OpenLiberty Bugs?
+* JSON Metrics ignore TimeUnit
+* Fallback does not work with private fallback method even though the example in the specs is made that way
+
 
 ## Development
 

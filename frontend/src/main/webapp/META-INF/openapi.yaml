@@ -30,3 +30,16 @@ paths:
       responses:
         200:
           description: Ok.
+  /tolerant/timeout:
+    get:
+      operationId: tolerantTimeout
+      parameters:
+      - name: delay
+        in: query
+        description: In milliseconds.
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Ok.
+
