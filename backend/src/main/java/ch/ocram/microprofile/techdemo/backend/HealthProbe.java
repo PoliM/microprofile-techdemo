@@ -13,7 +13,7 @@ public class HealthProbe implements HealthCheck {
 
     private int countdown;
 
-    @Counted(name = "setCoundown", monotonic = true)
+    @Counted(monotonic = true)
     public void setCountdown(int countdown) {
         this.countdown = countdown;
     }

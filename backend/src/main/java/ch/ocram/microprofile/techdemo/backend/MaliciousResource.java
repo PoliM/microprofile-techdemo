@@ -1,7 +1,6 @@
 package ch.ocram.microprofile.techdemo.backend;
 
 import org.eclipse.microprofile.health.Health;
-import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
@@ -24,9 +23,7 @@ public class MaliciousResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Metered
-    @Timed(name = "getSome", absolute = true,
-            description = "Time needed to for the malicious method.")
+    @Timed(description = "Time needed for the malicious method.")
     @APIResponse(
             responseCode = "200",
             description = "The operation went through successfully")
@@ -68,6 +65,7 @@ public class MaliciousResource {
     }
 
     @POST
+    @Timed(description = "Time needed to set the countdown.")
     @APIResponse(
             responseCode = "202",
             description = "The operation went through successfully")
