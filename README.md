@@ -55,12 +55,12 @@ It will also try to get the system properties once every second. The program end
 
 This is what you should be able to observe.
 
-* With bulkhead
-** Many of the calls are not successful because the bulkhead "is full"
-** The system properties get queried 10 times 
-* Without bulkhead
-** The calls take a long time
-** There are less than 10 calls to the system properties
+1. With bulkhead
+* Many of the calls are not successful because the bulkhead "is full"
+* The system properties get queried 10 times 
+2. Without bulkhead
+* The calls take a long time
+* There are less than 10 calls to the system properties
 
 
 ## Future stuff
@@ -72,7 +72,7 @@ This is what you should be able to observe.
 ## OpenLiberty Bugs?
 * JSON Metrics ignore TimeUnit
 * Fallback does not work with private fallback method even though the example in the specs is made that way
-
+* Does the circuit breaker close too early?
 
 ## Development
 
