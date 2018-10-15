@@ -48,6 +48,20 @@ This one is a bit more complicated. The `tolerantCircuitBreaker` method takes a 
 * Waiting for 10 seconds will bring the circuit into its "half closed" state. Hitting it with `true` will count up one time (because it fails and will open the circuit again). 
 * Switching back to `false` should close the circuit after two callls and after 10 second. (it happens earlier, but I don't know why yet)
 
+### Demonstration 4: Bulkhead
+
+There is a class `BadBulkheadClient` that tries to bombard the frontend with calls. Depending on a flag you can set in the source, it will either use the method with or without a bulkhead.
+It will also try to get the system properties once every second. The program ends after 10 seconds.
+
+This is what you should be able to observe.
+
+* With bulkhead
+** Many of the calls are not successful because the bulkhead "is full"
+** The system properties get queried 10 times 
+* Without bulkhead
+** The calls take a long time
+** There are less than 10 calls to the system properties
+
 
 ## Future stuff
 * Tracing

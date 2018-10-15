@@ -54,4 +54,15 @@ paths:
       responses:
         200:
           description: Ok.
-
+  /tolerant/withoutbulkhead:
+    get:
+      operationId: withoutBulkhead
+      responses:
+        200:
+          description: Ok.
+  /tolerant/withbulkhead:
+    get:
+      operationId: withBulkhead
+      responses:
+        200:
+          description: Ok.

@@ -1,10 +1,7 @@
 package ch.ocram.microprofile.techdemo.frontend;
 
 import ch.ocram.microprofile.techdemo.frontend.api.TolerantApi;
-import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
-import org.eclipse.microprofile.faulttolerance.Fallback;
-import org.eclipse.microprofile.faulttolerance.Retry;
-import org.eclipse.microprofile.faulttolerance.Timeout;
+import org.eclipse.microprofile.faulttolerance.*;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -84,4 +81,23 @@ public class TolerantResource implements TolerantApi {
                 .build();
     }
 
+
+    @Override
+    public Response withoutBulkhead() {
+        try {
+            return backendClient.getSome(200, false, false);
+        } catch (SomeApplicationException e) {
+            return Response.status(Response.Status.PAYMENT_REQUIRED).build();
+        }
+    }
+
+    @Bulkhead
+    @Override
+    public Response withBulkhead() {
+        try {
+            return backendClient.getSome(200, false, false);
+        } catch (SomeApplicationException e) {
+            return Response.status(Response.Status.PAYMENT_REQUIRED).build();
+        }
+    }
 }
