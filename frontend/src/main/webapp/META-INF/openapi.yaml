@@ -42,4 +42,16 @@ paths:
       responses:
         200:
           description: Ok.
+  /tolerant/circuitbreaker:
+    get:
+      operationId: tolerantCircuitBreaker
+      parameters:
+      - name: fail
+        in: query
+        description: true or false
+        schema:
+          type: boolean
+      responses:
+        200:
+          description: Ok.
 

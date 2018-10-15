@@ -29,13 +29,30 @@ The frontend uses the Microprofile REST-Client API to call the backend. This als
 
 
 ## Fault Tolerance
-TBD
+
+The fault tolerant stuff is also visible in the metrics.
+
+### Demonstration 1: Retry
+The `tolerantRetry` operation fails 80% of the time. With a `@Retry` you can show that it gets called multiple times (yes, there is an ugly hack to count the calls).
+To configure the retry behaviour you can change the value `.....tolerantRetry/Retry/maxRetries=100` in the `microprofile-config.properties` file. 
+
+### Demonstration 2: Timeout / Fallback
+The `tolerantTimeout` operation takes a parameter that tells the backend how long to stall. If you make that larger than 1000ms then the frontent will timeout and use 
+the fallback method.
+
+### Demonstration 3: CircuitBreaker / Fallback
+This one is a bit more complicated. The `tolerantCircuitBreaker` method takes a parameter that tells it to fail or not. You should be able to observe the following behaviours:
+
+* Calling it with `false` will return status code 200 and an increasing counter
+* Hitting it with `true` will only count up three more times. The status code is 503 (service unavailable). 
+* Waiting for 10 seconds will bring the circuit into its "half closed" state. Hitting it with `true` will count up one time (because it fails and will open the circuit again). 
+* Switching back to `false` should close the circuit after two callls and after 10 second. (it happens earlier, but I don't know why yet)
 
 
 ## Future stuff
 * Tracing
 * JWT
-* gRPC
+* gRPC / RSocket?
 * Comparison to https://12factor.net/ and "Beyond The 12 Factor App"
 
 ## OpenLiberty Bugs?

@@ -1,16 +1,25 @@
 package ch.ocram.microprofile.techdemo.frontend;
 
 import ch.ocram.microprofile.techdemo.frontend.api.TolerantApi;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.ThreadLocalRandom;
 
 @ApplicationScoped
 public class TolerantResource implements TolerantApi {
+
+    // Ok, this is a total hack an for demonstration purpose only!
+    private static int COUNTER = 0;
+    private static long LAST_UPDATE;
 
     @SuppressWarnings("CdiInjectionPointsInspection")
     @Inject
@@ -18,10 +27,19 @@ public class TolerantResource implements TolerantApi {
     private BackendClient backendClient;
 
     @Override
+    @Retry
     public Response tolerantRetry() {
         try {
-            backendClient.getSome(0, false, false);
-            return Response.ok().build();
+            // Reset the counter if the last call was a bit in the past
+            if (System.currentTimeMillis() - LAST_UPDATE > 500) {
+                COUNTER = 0;
+            }
+
+            COUNTER++;
+            LAST_UPDATE = System.currentTimeMillis();
+
+            backendClient.getSome(0, ThreadLocalRandom.current().nextDouble() > 0.2,  false);
+            return Response.ok("Counter: " + COUNTER, MediaType.TEXT_PLAIN_TYPE).build();
         } catch (SomeApplicationException e) {
             return Response.status(Response.Status.PAYMENT_REQUIRED).build();
         }
@@ -43,4 +61,27 @@ public class TolerantResource implements TolerantApi {
     public Response fallbackForTolerantTimeout(Integer delay) {
         return Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
+
+
+    @CircuitBreaker(requestVolumeThreshold = 4, failureRatio = 0.75, successThreshold = 2, delay = 10, delayUnit = ChronoUnit.SECONDS)
+    @Fallback(fallbackMethod = "fallbackForToleranCircuitBreaker")
+    @Override
+    public Response tolerantCircuitBreaker(Boolean fail) {
+        try {
+            COUNTER++;
+            backendClient.getSome(0, false, fail);
+            return Response.ok("Counter: " + COUNTER, MediaType.TEXT_PLAIN_TYPE).build();
+        } catch (SomeApplicationException e) {
+            throw new IllegalStateException();
+        }
+    }
+
+    public Response fallbackForToleranCircuitBreaker(Boolean fail) {
+        return Response
+                .status(Response.Status.SERVICE_UNAVAILABLE)
+                .entity("Counter: " + COUNTER)
+                .type(MediaType.TEXT_PLAIN_TYPE)
+                .build();
+    }
+
 }
