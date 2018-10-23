@@ -1,5 +1,6 @@
 package ch.ocram.microprofile.techdemo.frontend;
 
+import org.eclipse.microprofile.opentracing.Traced;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -16,6 +17,7 @@ import javax.ws.rs.core.Response;
 @RegisterRestClient
 @RegisterProvider(SomeApplicationExceptionMapper.class)
 @Path("/malicious")
+@Traced
 public interface BackendClient {
     @GET
     @Produces(MediaType.APPLICATION_JSON)

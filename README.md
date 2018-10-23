@@ -25,7 +25,8 @@ The REST services are @Timed and there is a @Counted on the health probe. Can be
 
 
 ## REST client
-The frontend uses the Microprofile REST-Client API to call the backend. This also has a "special" config property for the backend URL.
+The frontend uses the Microprofile REST-Client API to call the backend. This also has a "special" config property for the backend URL. (Currently it is commented out and replace 
+with an implementation that allows to send the tracing context to the next server).
 
 
 ## Fault Tolerance
@@ -63,8 +64,14 @@ This is what you should be able to observe.
 * There are less than 10 calls to the system properties
 
 
+### Demonstration 5: Tracing
+
+Both services support tracing. You need a running Zipkin server to record the calls.
+
+There was a slight problem: currently only the ClientBuilder can be configured to transfer the tracing context to the next server. Have a look at `BackendClientWithTracing` class.
+
+
 ## Future stuff
-* Tracing
 * JWT
 * gRPC / RSocket?
 * Comparison to https://12factor.net/ and "Beyond The 12 Factor App"

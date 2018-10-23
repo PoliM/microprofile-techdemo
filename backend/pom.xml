@@ -18,6 +18,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <packaging.type>minify,runnable</packaging.type>
         <testServerHttpPort>9502</testServerHttpPort>
+        <zipkin.usr.feature>https://github.com/WASdev/sample.opentracing.zipkintracer/releases/download/1.1/liberty-opentracing-zipkintracer-1.1-sample.zip</zipkin.usr.feature>
     </properties>
     
     <profiles>
@@ -64,6 +65,12 @@
         <dependency>
             <groupId>org.eclipse.microprofile.metrics</groupId>
             <artifactId>microprofile-metrics-api</artifactId>
+            <version>1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.opentracing</groupId>
+            <artifactId>microprofile-opentracing-api</artifactId>
             <version>1.1</version>
             <scope>provided</scope>
         </dependency>
@@ -130,6 +137,15 @@
                         <default.http.port>${testServerHttpPort}</default.http.port>
                     </bootstrapProperties>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>install-feature</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>install-feature</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -164,6 +180,25 @@
                             <systemPropertyVariables>
                                 <liberty.test.port>${testServerHttpPort}</liberty.test.port>
                             </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <executions>
+                    <execution>
+                        <id>install-tracer</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>${zipkin.usr.feature}</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.build.directory}/liberty/wlp/usr</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

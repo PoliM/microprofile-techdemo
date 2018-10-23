@@ -6,6 +6,7 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ public class MaliciousResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Timed(description = "Time needed for the malicious method.")
+    @Traced
     @APIResponse(
             responseCode = "200",
             description = "The operation went through successfully")

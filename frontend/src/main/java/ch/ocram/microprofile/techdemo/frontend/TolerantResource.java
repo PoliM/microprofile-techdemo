@@ -2,6 +2,7 @@ package ch.ocram.microprofile.techdemo.frontend;
 
 import ch.ocram.microprofile.techdemo.frontend.api.TolerantApi;
 import org.eclipse.microprofile.faulttolerance.*;
+import org.eclipse.microprofile.opentracing.Traced;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -18,10 +19,13 @@ public class TolerantResource implements TolerantApi {
     private static int COUNTER = 0;
     private static long LAST_UPDATE;
 
-    @SuppressWarnings("CdiInjectionPointsInspection")
+//    @SuppressWarnings("CdiInjectionPointsInspection")
+//    @Inject
+//    @RestClient
+//    private BackendClient backendClient;
+
     @Inject
-    @RestClient
-    private BackendClient backendClient;
+    private BackendClientWithTracing backendClient;
 
     @Override
     @Retry
@@ -45,6 +49,7 @@ public class TolerantResource implements TolerantApi {
     @Timeout(1000)
     @Fallback(fallbackMethod = "fallbackForTolerantTimeout")
     @Override
+    @Traced
     public Response tolerantTimeout(Integer delay) {
         try {
             int delayValue = delay == null ? 0 : delay.intValue();
