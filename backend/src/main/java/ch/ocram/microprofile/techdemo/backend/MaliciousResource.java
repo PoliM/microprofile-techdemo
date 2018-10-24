@@ -25,7 +25,6 @@ public class MaliciousResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Timed(description = "Time needed for the malicious method.")
-    @Traced
     @APIResponse(
             responseCode = "200",
             description = "The operation went through successfully")

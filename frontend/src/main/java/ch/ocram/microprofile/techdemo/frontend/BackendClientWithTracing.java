@@ -34,6 +34,13 @@ public class BackendClientWithTracing {
                 .queryParam("throwApplicationException", throwApplicationException)
                 .request().get();
 
+        if (response.getStatusInfo().getFamily() == Response.Status.Family.SERVER_ERROR) {
+            throw new RuntimeException("Server Error");
+        }
+
+        if (response.getStatus() == Response.Status.PAYMENT_REQUIRED.getStatusCode()) {
+            throw new SomeApplicationException();
+        }
         return response;
     }
 }
